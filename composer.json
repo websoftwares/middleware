@@ -33,6 +33,5 @@
         "psr-4": {
             "Websoftwares\\Tests\\Middleware\\":  "tests/"
         }
-    },
-    "minimum-stability ": "dev"
+    }
 }
