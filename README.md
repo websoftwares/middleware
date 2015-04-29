@@ -60,8 +60,6 @@ $middleware->addHandler($middlewareTwo);
 // Add more middleware
 ...
 
-$middleware = $this->middleware;
-
 // Call
 $middleware($request, $response);
 
