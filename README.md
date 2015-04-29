@@ -1,4 +1,4 @@
-#Middleware (v0.0.1)
+#Middleware (v0.0.*)
 This package lets u manage middleware for a HTTP request and response that implement the [PSR-7](https://github.com/php-fig/fig-standards/blob/master/proposed/http-message.md) HTTP message interfaces
 `Psr\Http\Message\ServerRequestInterface` and `Psr\Http\Message\ResponseInterface`.
 
@@ -38,9 +38,24 @@ $middleware = new Middleware;
 // Some middleware object that is callable through invoke or a closure 
 // for consistency u could implement the `Websoftwares\HandlerInterface`.
 
+// Invokable object
 $throttleMiddleware = new ThrotteObject
 
+// request + middelewareOne decoration <= objects are passed by reference
+$middelewareOne = function($request, $response) {
+    // Decorate the foo property
+    $request->foo = $request->foo + 1;
+};
+
+// response + middlewareTwo decoration <= objects are passed by reference
+$middlewareTwo = function($request, $response) {
+    // / Decorate the bar property
+    $response->bar = $response->bar . ' World';
+};
+
 $middleware->addHandler($throttleMiddleware);
+$middleware->addHandler($middelewareOne);
+$middleware->addHandler($middlewareTwo);
 ...
 // Add more middleware
 ...
@@ -53,6 +68,8 @@ $middleware($request, $response);
 ```
 
 ## Changelog
+- v0.0.3: Decorate the request and response example and tests added.
+- v0.0.2: Small fixes
 - v0.0.1: Initial 
 
 ## Testing

@@ -71,6 +71,40 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $returnValues);
     }
 
+    public function testPassByReferenceDecorator()
+    {
+        $request = $this->request;
+        $request->foo = 1;
+        $response = $this->response;
+        $response->bar = 'Hello';
+
+        $expectedRequest = 6;
+        $epectedResponse = 'Hello World';
+
+        // request + middelewareOne decoration <= objects are passed by reference
+        $middelewareOne = function ($request, $response) {
+            // Decorate the foo property
+            $request->foo = $request->foo + 1;
+        };
+
+        // response, RequestMiddelewareOne +  middlewareTwo decorations <= objects are passed by reference
+        $middlewareTwo = function ($request, $response) {
+            // / Decorate the bar property
+            $response->bar = $response->bar.' World';
+            $request->foo = $request->foo + 4;
+        };
+
+        $this->middleware->addHandler($middelewareOne);
+        $this->middleware->addHandler($middlewareTwo);
+
+        $middleware = $this->middleware;
+
+        $middleware($request, $response);
+
+        $this->assertEquals($expectedRequest, $request->foo);
+        $this->assertEquals($epectedResponse, $response->bar);
+    }
+
     /**
      * testAddHandlerFailsOnException.
      *
