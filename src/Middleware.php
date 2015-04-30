@@ -65,6 +65,9 @@ class Middleware
             return;
         }
 
+        // Default
+        $finalHandler = null;
+
         // Loop over all handlers
         foreach ($this->handlers as $handler) {
             // Next from queue FIFO
