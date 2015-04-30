@@ -40,7 +40,7 @@ class Middleware
     public function addHandler($handler = null)
     {
         // Check if handler is callablde
-        if (! is_callable($handler)) {
+        if (!is_callable($handler)) {
             throw new \InvalidArgumentException('The handler must be of type callable');
         }
 
@@ -71,7 +71,7 @@ class Middleware
             $next = $handler;
 
             // Call the handler
-            $finalHandler = $next($request,  $response);
+            $finalHandler = $next($request, $response);
         }
 
         // Return last from stack
