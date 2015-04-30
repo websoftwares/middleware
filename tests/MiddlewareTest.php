@@ -3,6 +3,7 @@
 namespace Websoftwares\Test\Middleware;
 
 use Websoftwares\Middleware\Middleware;
+use Phly\Http\ServerRequestFactory;
 
 /**
  * Class MiddlewareTest.
@@ -99,10 +100,56 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $middleware = $this->middleware;
 
-        $middleware($request, $response);
+        $r = $middleware($request, $response);
 
         $this->assertEquals($expectedRequest, $request->foo);
         $this->assertEquals($epectedResponse, $response->bar);
+    }
+
+    protected function newRequest($path, array $server = [])
+    {
+        $server['REQUEST_URI'] = $path;
+        $server = array_merge($_SERVER, $server);
+
+        return ServerRequestFactory::fromGlobals($server);
+    }
+
+    public function testWithPr7RouterPackageAuraV3()
+    {
+        $routerContainer = new \Aura\Router\RouterContainer();
+        $map = $routerContainer->getMap();
+        $matcher = $routerContainer->getMatcher();
+
+        $request = $this->newRequest('/');
+        $response = $this->response;
+
+        $response->bar = 'Hello';
+        $expectedResponse = 'Hello World';
+
+        // response + middlewareOne decoration <= objects are passed by reference
+        $middlewareOne = function ($request, $response) {
+            // / Decorate the bar property
+            $response->bar = $response->bar.' World';
+        };
+
+        $routeIndexAction = function ($request, $response) {
+            // Awesome sauce
+            return $response->bar;
+        };
+
+        // Add middleware
+        $this->middleware->addHandler($middlewareOne);
+
+        // Add route as last one
+        $this->middleware->addHandler($routeIndexAction);
+
+        $map->get('index.read', '/', $this->middleware); // <-- middleware becomes the handler
+
+        // We have a matching route
+        $route = $matcher->match($request);
+        $h = $route->handler;
+        $responseResult = $h($request, $response);
+        $this->assertEquals($expectedResponse, $responseResult);
     }
 
     /**
