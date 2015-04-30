@@ -69,8 +69,12 @@ class Middleware
         foreach ($this->handlers as $handler) {
             // Next from queue FIFO
             $next = $handler;
+
             // Call the handler
-            $next($request,  $response);
+            $finalHandler = $next($request,  $response);
         }
+
+        // Return last from stack
+        return $finalHandler;
     }
 }
