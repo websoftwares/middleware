@@ -72,7 +72,7 @@ Their are many excellent PHP router packages and in time some will be made compa
 In this basic example we will show u how to use the `Middleware` class in conjunction with the latest development version of the [Aura Router package](https://github.com/auraphp/Aura.Router/tree/3.x).
 
 
-```<?php  ?>
+```
 use Websoftwares\Middleware;
 use Aura\Router\RouterContainer;
 
