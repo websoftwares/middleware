@@ -115,6 +115,7 @@ $handler($request, $response);
 ```
 
 ## Changelog
+- v0.0.6: Removed dependencies.
 - v0.0.5: Fixes from scrutinizer suggestions.
 - v0.0.4: finalHandler + external package example.
 - v0.0.3: Decorate the request and response example and tests added.
