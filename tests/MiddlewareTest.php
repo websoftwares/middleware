@@ -19,8 +19,8 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->middleware = new Middleware();
-        $this->middleware1 = $this->getMock('Websoftwares\Middleware\HandlerInterface');
-        $this->middleware2 = $this->getMock('Websoftwares\Middleware\HandlerInterface');
+        $this->middleware1 = $this->getMock('Websoftwares\Middleware\MiddlewareInterface');
+        $this->middleware2 = $this->getMock('Websoftwares\Middleware\MiddlewareInterface');
 
         $this->request = $this->getMock('Psr\Http\Message\ServerRequestInterface');
         $this->response = $this->getMock('Psr\Http\Message\ResponseInterface');
@@ -33,9 +33,9 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
             $this->middleware);
     }
 
-    public function testAddHandlerSucceeds()
+    public function testaddSucceeds()
     {
-        $actual = $this->middleware->addHandler($this->middleware1);
+        $actual = $this->middleware->add($this->middleware1);
         $expected = 'Websoftwares\Middleware\Middleware';
         $this->assertInstanceOf($expected, $actual);
     }
@@ -50,7 +50,7 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
                 $returnValues[] = 1;
             }));
 
-        $this->middleware->addHandler($this->middleware1);
+        $this->middleware->add($this->middleware1);
 
         $this->middleware2->expects($this->once())->method('__invoke')
             ->with($this->equalTo($this->request), $this->equalTo($this->response))
@@ -58,8 +58,8 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
                 $returnValues[] = 2;
             }));
 
-        $this->middleware->addHandler($this->middleware2);
-        $this->middleware->addHandler(function ($request, $response) use (&$returnValues) {
+        $this->middleware->add($this->middleware2);
+        $this->middleware->add(function ($request, $response) use (&$returnValues) {
             $returnValues[] = 3;
         });
 
@@ -95,8 +95,8 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
             $request->foo = $request->foo + 4;
         };
 
-        $this->middleware->addHandler($middelewareOne);
-        $this->middleware->addHandler($middlewareTwo);
+        $this->middleware->add($middelewareOne);
+        $this->middleware->add($middlewareTwo);
 
         $middleware = $this->middleware;
 
@@ -138,10 +138,10 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
         };
 
         // Add middleware
-        $this->middleware->addHandler($middlewareOne);
+        $this->middleware->add($middlewareOne);
 
         // Add route as last one
-        $this->middleware->addHandler($routeIndexAction);
+        $this->middleware->add($routeIndexAction);
 
         $map->get('index.read', '/', $this->middleware); // <-- middleware becomes the handler
 
@@ -153,7 +153,7 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * testAddHandlerFailsOnException.
+     * testaddFailsOnException.
      *
      * @expectedException Exception
      */
@@ -165,7 +165,7 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->request), $this->equalTo($this->response))
             ->will($this->throwException($exception));
 
-        $this->middleware->addHandler($this->middleware1);
+        $this->middleware->add($this->middleware1);
 
         $middleware = $this->middleware;
 
@@ -173,16 +173,16 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * testAddHandlerFailsOnException.
+     * testaddFailsOnException.
      *
      * @expectedException InvalidArgumentException
      */
-    public function testAddHandlerFailsOnException()
+    public function testaddFailsOnException()
     {
-        $this->middleware->addHandler();
+        $this->middleware->add();
     }
 
-    public function testMiddlewareFailsOnNoHandlers()
+    public function testMiddlewareFailsOnNoCallable()
     {
         $middleware = new Middleware();
         $app = $middleware($this->request, $this->response);

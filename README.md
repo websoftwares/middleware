@@ -36,7 +36,7 @@ use Websoftwares\Middleware;
 $middleware = new Middleware;
 
 // Some middleware object that is callable through invoke or a closure 
-// for consistency u could implement the `Websoftwares\HandlerInterface`.
+// for consistency u could implement the `Websoftwares\MiddlewareInterface`.
 
 // Invokable object
 $throttleMiddleware = new ThrotteObject
@@ -53,9 +53,9 @@ $middlewareTwo = function($request, $response) {
     $response->bar = $response->bar . ' World';
 };
 
-$middleware->addHandler($throttleMiddleware);
-$middleware->addHandler($middelewareOne);
-$middleware->addHandler($middlewareTwo);
+$middleware->add($throttleMiddleware);
+$middleware->add($middelewareOne);
+$middleware->add($middlewareTwo);
 ...
 // Add more middleware
 ...
@@ -94,14 +94,14 @@ $routeIndexAction = function($request, $response) {
 };
 
 // Add middleware
-$middleware->addHandler($middlewareTwo);
+$middleware->add($middlewareTwo);
 
 ...
 // Add more middleware
 ...
 
 // Add route as last one
-$middleware->addHandler($routeIndexAction);
+$middleware->add($routeIndexAction);
 
 $map->get('index.read', '/',$middleware); // <-- middleware becomes the handler
 
@@ -115,12 +115,8 @@ $handler($request, $response);
 ```
 
 ## Changelog
+- v0.0.7: Api changes.
 - v0.0.6: Removed dependencies.
-- v0.0.5: Fixes from scrutinizer suggestions.
-- v0.0.4: finalHandler + external package example.
-- v0.0.3: Decorate the request and response example and tests added.
-- v0.0.2: Small fixes.
-- v0.0.1: Initial.
 
 ## Testing
 In the tests folder u can find several tests.
