@@ -13,39 +13,39 @@ use Psr\Http\Message\ResponseInterface;
 class Middleware
 {
     /**
-     * $handlers.
+     * $queue.
      *
      * @var SplQueue
      */
-    protected $handlers;
+    protected $queue;
 
     /**
      * __construct.
      */
     public function __construct()
     {
-        $this->handlers = new \SplQueue();
-        $this->handlers->setIteratorMode(
+        $this->queue = new \SplQueue();
+        $this->queue->setIteratorMode(
             \SplDoublyLinkedList::IT_MODE_FIFO | \SplDoublyLinkedList::IT_MODE_KEEP
         );
     }
 
     /**
-     * addHandler.
+     * add.
      *
-     * @param callable $handler
+     * @param callable $callable
      *
      * @return self
      */
-    public function addHandler($handler = null)
+    public function add($callable = null)
     {
-        // Check if handler is callablde
-        if (!is_callable($handler)) {
-            throw new \InvalidArgumentException('The handler must be of type callable');
+        // Check if callable is callablde
+        if (!is_callable($callable)) {
+            throw new \InvalidArgumentException('Add a valid callable');
         }
 
         // Add to Queue
-        $this->handlers->push($handler);
+        $this->queue->push($callable);
 
         return $this;
     }
@@ -60,24 +60,24 @@ class Middleware
         ServerRequestInterface $request,
         ResponseInterface $response)
     {
-        // No handlers found
-        if ($this->handlers->count() < 1) {
+        // No callables found
+        if ($this->queue->count() < 1) {
             return;
         }
 
         // Default
-        $finalHandler = null;
+        $last = null;
 
-        // Loop over all handlers
-        foreach ($this->handlers as $handler) {
+        // Loop over the queue
+        foreach ($this->queue as $callable) {
             // Next from queue FIFO
-            $next = $handler;
+            $next = $callable;
 
-            // Call the handler
-            $finalHandler = $next($request, $response);
+            // Call the callable
+            $last = $next($request, $response);
         }
 
-        // Return last from stack
-        return $finalHandler;
+        // Return last from queue
+        return $last;
     }
 }

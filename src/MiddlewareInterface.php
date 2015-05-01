@@ -6,11 +6,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * interface HandlerInterface.
+ * interface MiddlewareInterface.
  *
  * @author Boris <boris@websoftwar.es>
  */
-interface HandlerInterface
+interface MiddlewareInterface
 {
     /**
      * __invoke.
