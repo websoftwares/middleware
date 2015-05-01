@@ -28,12 +28,12 @@ php composer.phar install
 ```
 
 ## Usage
-Basic usage of the `Middleware` class.
+Basic usage of the `MiddlewareRunner` class.
 
 ```php
-use Websoftwares\Middleware;
+use Websoftwares\Middleware\MiddlewareRunner;
 
-$middleware = new Middleware;
+$middleware = new MiddlewareRunner;
 
 // Some middleware object that is callable through invoke or a closure 
 // for consistency u could implement the `Websoftwares\MiddlewareInterface`.
@@ -69,18 +69,18 @@ $m($request, $response);
 
 ## Routing example with external package
 Their are many excellent PHP router packages and in time some will be made compatible with PSR-7.
-In this basic example we will show u how to use the `Middleware` class in conjunction with the latest development version of the [Aura Router package](https://github.com/auraphp/Aura.Router/tree/3.x).
+In this basic example we will show u how to use the `MiddlewareRunner` class in conjunction with the latest development version of the [Aura Router package](https://github.com/auraphp/Aura.Router/tree/3.x).
 
 
 ```php
-use Websoftwares\Middleware;
+use Websoftwares\Middleware\MiddlewareRunner;
 use Aura\Router\RouterContainer;
 
 $routerContainer = new RouterContainer;
 $map = $routerContainer->getMap();
 $matcher = $routerContainer->getMatcher();
 
-$middleware = new Middleware;
+$middleware = new MiddlewareRunner;
 
 // response + middlewareOne decoration <= objects are passed by reference
 $middlewareOne = function ($request, $response) {
@@ -115,6 +115,7 @@ $handler($request, $response);
 ```
 
 ## Changelog
+- v0.0.8: Renamed Middleware Class => MiddlewareRunner Class
 - v0.0.7: Api changes.
 - v0.0.6: Removed dependencies.
 

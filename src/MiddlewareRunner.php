@@ -4,13 +4,14 @@ namespace Websoftwares\Middleware;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use SplQueue;
 
 /**
- * Middleware.
+ * MiddlewareRunner.
  *
  * @author Boris <boris@websoftwar.es>
  */
-class Middleware
+class MiddlewareRunner
 {
     /**
      * $queue.
@@ -24,7 +25,7 @@ class Middleware
      */
     public function __construct()
     {
-        $this->queue = new \SplQueue();
+        $this->queue = new SplQueue();
         $this->queue->setIteratorMode(
             \SplDoublyLinkedList::IT_MODE_FIFO | \SplDoublyLinkedList::IT_MODE_KEEP
         );

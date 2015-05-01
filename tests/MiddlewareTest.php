@@ -2,7 +2,7 @@
 
 namespace Websoftwares\Test\Middleware;
 
-use Websoftwares\Middleware\Middleware;
+use Websoftwares\Middleware\MiddlewareRunner;
 use Phly\Http\ServerRequestFactory;
 
 /**
@@ -18,7 +18,7 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->middleware = new Middleware();
+        $this->middleware = new MiddlewareRunner();
         $this->middleware1 = $this->getMock('Websoftwares\Middleware\MiddlewareInterface');
         $this->middleware2 = $this->getMock('Websoftwares\Middleware\MiddlewareInterface');
 
@@ -29,14 +29,14 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testInstantiateAsObjectSucceeds()
     {
         $this->assertInstanceOf(
-            'Websoftwares\Middleware\Middleware',
+            'Websoftwares\Middleware\MiddlewareRunner',
             $this->middleware);
     }
 
     public function testaddSucceeds()
     {
         $actual = $this->middleware->add($this->middleware1);
-        $expected = 'Websoftwares\Middleware\Middleware';
+        $expected = 'Websoftwares\Middleware\MiddlewareRunner';
         $this->assertInstanceOf($expected, $actual);
     }
 
@@ -157,7 +157,7 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException Exception
      */
-    public function testMiddlewareFailsException()
+    public function testMiddlewareRunnerFailsException()
     {
         $exception = new \Exception('test', 1);
 
@@ -182,9 +182,9 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->middleware->add();
     }
 
-    public function testMiddlewareFailsOnNoCallable()
+    public function testMiddlewareRunnerFailsOnNoCallable()
     {
-        $middleware = new Middleware();
+        $middleware = new MiddlewareRunner();
         $app = $middleware($this->request, $this->response);
 
         $this->assertNull($app);
