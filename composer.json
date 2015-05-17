@@ -29,11 +29,16 @@
         "phpunit/phpunit": "dev-master",
         "satooshi/php-coveralls": "dev-master",
         "aura/router": "3.*@dev",
-        "phly/http": "~0.0"
+        "phly/http": "~0.0",
+        "acquia/http-hmac-php": "*"
     },
     "autoload-dev": {
         "psr-4": {
-            "Websoftwares\\Tests\\Middleware\\":  "tests/"
+            "Websoftwares\\Tests\\Middleware\\":  "tests/",
+            "Acquia\\Hmac\\Test\\": "vendor/acquia/http-hmac-php/test/"
         }
+    },
+    "suggest": {
+        "acquia/http-hmac-php": "HMAC Request Signer is a PHP library that implements the HTTP HMAC Spec to sign and verify RESTful Web API requests."
     }
 }
