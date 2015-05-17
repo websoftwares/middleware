@@ -6,7 +6,7 @@ use Websoftwares\Middleware\MiddlewareRunner;
 use Phly\Http\ServerRequestFactory;
 
 /**
- * Class MiddlewareTest.
+ * Class MiddlewareRunnerTest.
  */
 class MiddlewareTest extends \PHPUnit_Framework_TestCase
 {

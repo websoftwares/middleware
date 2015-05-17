@@ -114,7 +114,52 @@ $handler($request, $response);
 
 ```
 
+## Adapters
+At the time of writing PSR-7 is almost on the horizon and their are many well written community supported HTTP orientated packages but most packages are not yet compliant.
+
+To avoid mass rewrites of all these great packages or waiting for the author and or community to update them or holding out on the advantage of new compliant packages we can make use of the Adapter pattern to make them for example suitable for PSR-7 middleware.
+
+## Adapter RequestAuthenticatorAdapter example
+The package [acquia/http-hmac-php](https://github.com/acquia/http-hmac-php) is an implementation of the HTTP HMAC Spec in PHP 
+We want to validate the signature throw an exception or continue the middleware stack if it is a valid signature.
+
+```php
+use Websoftwares\Middleware\MiddlewareRunner;
+use Acquia\Hmac\RequestAuthenticator;
+
+
+$middleware = new MiddlewareRunner;
+
+// response + middlewareOne decoration <= objects are passed by reference
+$middlewareOne = function ($request, $response) {
+    // / Decorate the bar property
+    $response->bar = $response->bar.' World';
+};
+
+// Add middleware
+$middleware->add($middlewareOne);
+
+...
+// Add more middleware
+...
+
+// $keyLoader implements \Acquia\Hmac\KeyLoaderInterface
+$authenticator = new RequestAuthenticator(new RequestSigner(), '+15 minutes');
+
+$authenticatorMiddleware = new RequestAuthenticatorAdapter($authenticator, $keyLoader);
+
+$middleware->add($authenticatorMiddleware);
+
+// Call
+$m = $middleware;
+
+$m($request, $response);
+
+```
+
+
 ## Changelog
+- v0.0.9: Added abstract adapter and first implementation "acquia/http-hmac-php" package
 - v0.0.8: Renamed Middleware Class => MiddlewareRunner Class
 - v0.0.7: Api changes.
 - v0.0.6: Removed dependencies.
