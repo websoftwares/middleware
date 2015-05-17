@@ -7,6 +7,7 @@ use Phly\Http\ServerRequestFactory;
 use Acquia\Hmac\RequestAuthenticator;
 use Acquia\Hmac\RequestSigner;
 use Acquia\Hmac\Test\DummyKeyLoader;
+use Websoftwares\Middleware\MiddlewareRunner;
 
 /**
  * Class RequestAuthenticatorAdapterTest.
@@ -14,14 +15,20 @@ use Acquia\Hmac\Test\DummyKeyLoader;
 class RequestAuthenticatorAdapterTest extends \PHPUnit_Framework_TestCase
 {
     protected $response;
+    protected $middleware;
+    protected $middleware1;
 
     public function setUp()
     {
         $this->response = $this->getMock('Psr\Http\Message\ResponseInterface');
+        $this->middleware = new MiddlewareRunner();
+        $this->middleware1 = $this->getMock('Websoftwares\Middleware\MiddlewareInterface');
     }
 
     public function testValidSignature()
     {
+        $returnValues = array();
+
         $signer = new RequestSigner();
         $signer->addCustomHeader('Custom1');
 
@@ -45,6 +52,22 @@ class RequestAuthenticatorAdapterTest extends \PHPUnit_Framework_TestCase
         $authenticator = new RequestAuthenticatorAdapter($authenticator, $keyLoader);
 
         $this->assertNull($authenticator($request, $this->response));
+
+        $this->middleware1->expects($this->once())->method('__invoke')
+            ->with($this->equalTo($request), $this->equalTo($this->response))
+            ->will($this->returnCallback(function () use (&$returnValues) {
+                $returnValues[] = 1;
+            }));
+
+        $this->middleware->add($this->middleware1);
+        $this->middleware->add($authenticator);
+
+        $middleware = $this->middleware;
+        $actual = $middleware($request, $this->response);
+        $this->assertNull($actual);
+
+        $expected = array(1);
+        $this->assertEquals($expected, $returnValues);
     }
 
     /**
