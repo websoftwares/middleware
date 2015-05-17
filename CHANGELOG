@@ -1,3 +1,4 @@
+- v0.0.9: Added abstract adapter and first implementation "acquia/http-hmac-php" package
 - v0.0.8: Renamed Middleware Class => MiddlewareRunner Class
 - v0.0.7: Api changes.
 - v0.0.6: Removed dependencies.
