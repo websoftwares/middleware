@@ -115,7 +115,7 @@ $handler($request, $response);
 ```
 
 ## Adapters
-At the time of writing PSR-7 is almost on the horizon and their are many well written community supported HTTP orientated packages but most packages are not yet compliant.
+At the time of writing PSR-7 is ~~almost on the horizon~~ released :-) and their are many well written community supported HTTP orientated packages but most packages are not yet compliant.
 
 To avoid mass rewrites of all these great packages or waiting for the author and or community to update them or holding out on the advantage of new compliant packages we can make use of the Adapter pattern to make them for example suitable for PSR-7 middleware.
 
@@ -157,12 +157,9 @@ $m($request, $response);
 
 ```
 
-
 ## Changelog
+- v0.0.10: Logic to exit on response added
 - v0.0.9: Added abstract adapter and first implementation "acquia/http-hmac-php" package
-- v0.0.8: Renamed Middleware Class => MiddlewareRunner Class
-- v0.0.7: Api changes.
-- v0.0.6: Removed dependencies.
 
 ## Testing
 In the tests folder u can find several tests.

@@ -72,7 +72,6 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $returnValues);
     }
 
-
     public function testMiddlewareExitOnResponse()
     {
         $returnValues = array();
@@ -99,12 +98,11 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
         $middleware = $this->middleware;
 
         $actual = $middleware($this->request, $this->response);
-        $this->assertInstanceOf('Psr\Http\Message\ResponseInterface',$actual);
+        $this->assertInstanceOf('Psr\Http\Message\ResponseInterface', $actual);
 
         $expected = array(1);
         $this->assertEquals($expected, $returnValues);
     }
-
 
     public function testPassByReferenceDecorator()
     {
