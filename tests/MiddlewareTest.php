@@ -72,6 +72,38 @@ class MiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $returnValues);
     }
 
+    public function testMiddlewareExitOnResponse()
+    {
+        $returnValues = array();
+
+        $this->middleware1->expects($this->once())->method('__invoke')
+            ->with($this->equalTo($this->request), $this->equalTo($this->response))
+            ->will($this->returnCallback(function () use (&$returnValues) {
+                $returnValues[] = 1;
+            }));
+
+        $this->middleware->add($this->middleware1);
+
+        $this->middleware2->expects($this->once())->method('__invoke')
+            ->with($this->equalTo($this->request), $this->equalTo($this->response))
+            ->will($this->returnCallback(function () use (&$returnValues) {
+                return $this->response;
+            }));
+
+        $this->middleware->add($this->middleware2);
+        $this->middleware->add(function ($request, $response) use (&$returnValues) {
+            $returnValues[] = 3;
+        });
+
+        $middleware = $this->middleware;
+
+        $actual = $middleware($this->request, $this->response);
+        $this->assertInstanceOf('Psr\Http\Message\ResponseInterface', $actual);
+
+        $expected = array(1);
+        $this->assertEquals($expected, $returnValues);
+    }
+
     public function testPassByReferenceDecorator()
     {
         $request = $this->request;

@@ -71,11 +71,17 @@ class MiddlewareRunner
 
         // Loop over the queue
         foreach ($this->queue as $callable) {
+
             // Next from queue FIFO
             $next = $callable;
 
             // Call the callable
             $last = $next($request, $response);
+
+            // Exit on ResponseInterface
+            if ($last instanceof ResponseInterface) {
+                return $last;
+            }
         }
 
         // Return last from queue
