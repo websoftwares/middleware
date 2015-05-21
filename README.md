@@ -158,6 +158,7 @@ $m($request, $response);
 ```
 
 ## Changelog
+- v0.0.11: Updated psr-7 psr/http-message to 1.0 and renamed phly/http with zendframework/zend-diactoros
 - v0.0.10: Logic to exit on response added
 - v0.0.9: Added abstract adapter and first implementation "acquia/http-hmac-php" package
 
