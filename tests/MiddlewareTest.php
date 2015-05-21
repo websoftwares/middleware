@@ -3,7 +3,7 @@
 namespace Websoftwares\Test\Middleware;
 
 use Websoftwares\Middleware\MiddlewareRunner;
-use Phly\Http\ServerRequestFactory;
+use Zend\Diactoros\ServerRequestFactory;
 
 /**
  * Class MiddlewareRunnerTest.

@@ -16,9 +16,16 @@
         }
     ],
 
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:websoftwares/Aura.Router"
+        }
+    ],
+
     "require" : {
         "php": ">=5.5.0",
-        "psr/http-message": "~0.0"
+        "psr/http-message": "~1.0.0"
     },
     "autoload": {
         "psr-4": {
@@ -29,7 +36,7 @@
         "phpunit/phpunit": "dev-master",
         "satooshi/php-coveralls": "dev-master",
         "aura/router": "3.*@dev",
-        "phly/http": "~0.0",
+        "zendframework/zend-diactoros": "~1.0.0",
         "acquia/http-hmac-php": "*"
     },
     "autoload-dev": {

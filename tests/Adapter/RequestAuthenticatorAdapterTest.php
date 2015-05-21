@@ -3,7 +3,7 @@
 namespace Websoftwares\Test\Middleware\Adapter;
 
 use Websoftwares\Middleware\Adapter\RequestAuthenticatorAdapter;
-use Phly\Http\ServerRequestFactory;
+use Zend\Diactoros\ServerRequestFactory;
 use Acquia\Hmac\RequestAuthenticator;
 use Acquia\Hmac\RequestSigner;
 use Acquia\Hmac\Test\DummyKeyLoader;
