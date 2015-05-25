@@ -16,13 +16,6 @@
         }
     ],
 
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:websoftwares/Aura.Router"
-        }
-    ],
-
     "require" : {
         "php": ">=5.5.0",
         "psr/http-message": "~1.0.0"
