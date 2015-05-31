@@ -125,8 +125,9 @@ We want to validate the signature throw an exception or continue the middleware 
 
 ```php
 use Websoftwares\Middleware\MiddlewareRunner;
+use Acquia\Hmac\RequestSigner;
 use Acquia\Hmac\RequestAuthenticator;
-
+use Websoftwares\Middleware\Adapter\RequestAuthenticatorAdapter;
 
 $middleware = new MiddlewareRunner;
 
@@ -143,9 +144,10 @@ $middleware->add($middlewareOne);
 // Add more middleware
 ...
 
-// $keyLoader implements \Acquia\Hmac\KeyLoaderInterface
+
 $authenticator = new RequestAuthenticator(new RequestSigner(), '+15 minutes');
 
+// $keyLoader implements \Acquia\Hmac\KeyLoaderInterface
 $authenticatorMiddleware = new RequestAuthenticatorAdapter($authenticator, $keyLoader);
 
 $middleware->add($authenticatorMiddleware);
